@@ -1,12 +1,15 @@
 #!/bin/bash
 
-#GET Project's Name and EcoSystem
-PRJGROUP=$(cat /aws.services/.ec2Instance| grep EcoSystem | awk '{print $2}')
-PRJUSER=$(cat /aws.services/.ec2Instance| grep WebApplication | awk '{print $2}')
+#GET Project's Environment, EcoSystem and Name Information
+appEnv=$(cat /aws.services/.ec2Instance   | grep Environment    | awk '{print $2}')
+appEco=$(cat /aws.services/.ec2Instance   | grep EcoSystem      | awk '{print $2}')
+appName=$(cat /aws.services/.ec2Instance  | grep WebApplication | awk '{print $2}')
 
-echo $PRJGROUP
-echo $PRJUSER
+echo "####################"
+  cat $appEnv
+  cat $appEco
+  cat $appName
+echo "####################"
 
-#yes|cp /mnt/S3.Buckets/Global.GEM.Apps/.aws/$PRJGROUP.$PRJUSER.credentials /aws.services/.aws/.$PRJGROUP.$PRJUSER.credentials
-aws s3 cp s3://global.gem.apps/.aws/$PRJGROUP.$PRJUSER.credentials /aws.services/.aws/.$PRJGROUP.$PRJUSER.credentials
-chmod 600 /aws.services/.aws/.$PRJGROUP.$PRJUSER.credentials
+aws s3 cp s3://$appEnv-$appEco-$appName/.app-iam_user.credentials /aws.services/.aws/.$appEco.$appName.credentials
+chmod 600 /aws.services/.aws/.$appEco.$appName.credentials

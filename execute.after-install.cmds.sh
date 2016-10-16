@@ -1,31 +1,31 @@
 #!/bin/bash
 
-DIR = "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 ## GET Instance's Identity ##
-ec2InstaceID            = $(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep instanceId | awk -F\" '{print $4}')
-ec2InstanceRegion       = $(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
-ec2InstancePrivateIP    = $(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep privateIp | awk -F\" '{print $4}')
+ec2InstaceID=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep instanceId | awk -F\" '{print $4}')
+ec2InstanceRegion=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
+ec2InstancePrivateIP=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep privateIp | awk -F\" '{print $4}')
 
 ## GET Instance's Tags ##
-ec2TagEcoSystem         = $(aws ec2 describe-tags --filters "Name=resource-id,Values=$ec2InstaceID" "Name=key,Values=EcoSystem" --region=$ec2InstanceRegion | grep Value | awk -F\" '{print $4}')
-ec2TagWebApplication    = $(aws ec2 describe-tags --filters "Name=resource-id,Values=$ec2InstaceID" "Name=key,Values=WebApplication" --region=$ec2InstanceRegion | grep Value | awk -F\" '{print $4}')
-ec2TagInterface         = $(aws ec2 describe-tags --filters "Name=resource-id,Values=$ec2InstaceID" "Name=key,Values=Interface" --region=$ec2InstanceRegion | grep Value | awk -F\" '{print $4}')
-ec2TagEnvironment       = $(aws ec2 describe-tags --filters "Name=resource-id,Values=$ec2InstaceID" "Name=key,Values=Environment" --region=$ec2InstanceRegion | grep Value | awk -F\" '{print $4}')
-ec2TagServiceStatus     = $(aws ec2 describe-tags --filters "Name=resource-id,Values=$ec2InstaceID" "Name=key,Values=ServiceStatus" --region=$ec2InstanceRegion | grep Value | awk -F\" '{print $4}')
+ec2TagEcoSystem=$(aws ec2 describe-tags --filters "Name=resource-id,Values=$ec2InstaceID" "Name=key,Values=EcoSystem" --region=$ec2InstanceRegion | grep Value | awk -F\" '{print $4}')
+ec2TagWebApplication=$(aws ec2 describe-tags --filters "Name=resource-id,Values=$ec2InstaceID" "Name=key,Values=WebApplication" --region=$ec2InstanceRegion | grep Value | awk -F\" '{print $4}')
+ec2TagInterface=$(aws ec2 describe-tags --filters "Name=resource-id,Values=$ec2InstaceID" "Name=key,Values=Interface" --region=$ec2InstanceRegion | grep Value | awk -F\" '{print $4}')
+ec2TagEnvironment=$(aws ec2 describe-tags --filters "Name=resource-id,Values=$ec2InstaceID" "Name=key,Values=Environment" --region=$ec2InstanceRegion | grep Value | awk -F\" '{print $4}')
+ec2TagServiceStatus=$(aws ec2 describe-tags --filters "Name=resource-id,Values=$ec2InstaceID" "Name=key,Values=ServiceStatus" --region=$ec2InstanceRegion | grep Value | awk -F\" '{print $4}')
 
 ## EXPORT Instance's Informations ##
-    echo "EC2 Instance Identity:"                   > /aws.services/.ec2Instance
-    echo "instanceID: $ec2InstaceID"                >> /aws.services/.ec2Instance
-    echo "instanceRegion: $ec2InstanceRegion"       >> /aws.services/.ec2Instance
+    echo "EC2 Instance Identity:" > /aws.services/.ec2Instance
+    echo "instanceID: $ec2InstaceID" >> /aws.services/.ec2Instance
+    echo "instanceRegion: $ec2InstanceRegion" >> /aws.services/.ec2Instance
     echo "instancePrivateIP: $ec2InstancePrivateIP" >> /aws.services/.ec2Instance
 
-    echo "EC2 Instance Tags:"                       >> /aws.services/.ec2Instance
-    echo "EcoSystem: $ec2TagEcoSystem"              >> /aws.services/.ec2Instance
-    echo "WebApplication: $ec2TagWebApplication"    >> /aws.services/.ec2Instance
-    echo "Interface: $ec2TagInterface"              >> /aws.services/.ec2Instance
-    echo "Environment: $ec2TagEnvironment"          >> /aws.services/.ec2Instance
-    echo "ServiceStatus: $ec2TagServiceStatus"      >> /aws.services/.ec2Instance
+    echo "EC2 Instance Tags:" >> /aws.services/.ec2Instance
+    echo "EcoSystem: $ec2TagEcoSystem" >> /aws.services/.ec2Instance
+    echo "WebApplication: $ec2TagWebApplication" >> /aws.services/.ec2Instance
+    echo "Interface: $ec2TagInterface" >> /aws.services/.ec2Instance
+    echo "Environment: $ec2TagEnvironment" >> /aws.services/.ec2Instance
+    echo "ServiceStatus: $ec2TagServiceStatus" >> /aws.services/.ec2Instance
 
 ## VIEW Instance's Informations ##
     echo "##################################################"
@@ -36,7 +36,7 @@ ec2TagServiceStatus     = $(aws ec2 describe-tags --filters "Name=resource-id,Va
 
 ## SET runasuser variable based on the Project ##
 # runuser -l $appUser -c ' ... '
-sshUser=$(cat /aws.services/.ec2Instance| grep WebApplication | awk '{print $2}')
+    sshUser=$(cat /aws.services/.ec2Instance| grep WebApplication | awk '{print $2}')
 
 
 ## ERROR Handing Function ##
@@ -47,10 +47,10 @@ die() {
 }
 
 
-## ALTER EN2 Instance Tag: ServiceStatus ##
-echo "Altering EC2 Instace ServiceStatus Tag FROM [inDeployment-beforeInstall] TO [inDeployment-afterInstall]"
-aws ec2 delete-tags --resources $ec2InstaceID --tags Key=ServiceStatus,Value=inDeployment-beforeInstall
-aws ec2 create-tags --resources $ec2InstaceID --tags Key=ServiceStatus,Value=inDeployment-afterInstall
+## ALTER EC2 Instance Tag: ServiceStatus ##
+    echo "Altering EC2 Instace ServiceStatus Tag FROM [inDeployment-beforeInstall] TO [inDeployment-afterInstall]"
+    aws ec2 delete-tags --resources $ec2InstaceID --tags Key=ServiceStatus,Value=inDeployment-beforeInstall
+    aws ec2 create-tags --resources $ec2InstaceID --tags Key=ServiceStatus,Value=inDeployment-afterInstall
 
 
 ## EXECUTING Commands ##
@@ -91,6 +91,5 @@ bash $DIR/after.install.cmds/209-install.nfs.sh || die "Unable to execute BashSc
 #bash $DIR/after.install.cmds/210-install.s3fs.sh || die "Unable to execute BashScript: 210-install.s3fs.sh"
 echo "##-- 211-install.newrelic.sh"
 bash $DIR/after.install.cmds/211-install.newrelic.sh || die "Unable to execute BashScript: 211-install.newrelic.sh"
-
     
 echo "## END CodeDeploy LifeCycle: \"After Install\""

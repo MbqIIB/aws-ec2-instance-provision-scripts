@@ -19,7 +19,7 @@ echo $APPUSER
 echo $APPINTERFACE
 echo $APPENV
 
-cd ~
+cd /home/$PRJUSER/
 
 echo "Enable & Start NewRelic Services.."
 #yes|cp -rf /mnt/S3.Buckets/$APPGROUP.$APPUSER/vHost.Config.Files/$APPINTERFACE/$APPENV.env/newrelic.ini /etc/php.d/newrelic.ini

@@ -1,11 +1,10 @@
 #!/bin/bash
 
 #GET Project's Name and EcoSystem
-APPGROUP=$(cat /aws.services/.ec2Instance| grep EcoSystem | awk '{print $2}')
-APPUSER=$(cat /aws.services/.ec2Instance| grep WebApplication | awk '{print $2}')
-APPENV=$(cat /aws.services/.ec2Instance| grep Environment | awk '{print $2}')
-APPINTERFACE=$(cat /aws.services/.ec2Instance| grep Interface | awk '{print $2}')
-
+appEco=$(cat /aws.services/.ec2Instance     | grep EcoSystem        | awk '{print $2}')
+appName=$(cat /aws.services/.ec2Instance    | grep WebApplication   | awk '{print $2}')
+appEnv=$(cat /aws.services/.ec2Instance     | grep Environment      | awk '{print $2}')
+appIFace=$(cat /aws.services/.ec2Instance   | grep Interface        | awk '{print $2}')
 
 #ERROR Handing Function
 die() {
@@ -14,53 +13,57 @@ die() {
     exit 1
 }
 
-echo $APPGROUP
-echo $APPUSER
-echo $APPINTERFACE
-echo $APPENV
 
 cd /home/$PRJUSER/
 
-echo "Enable & Start NewRelic Services.."
-#yes|cp -rf /mnt/S3.Buckets/$APPGROUP.$APPUSER/vHost.Config.Files/$APPINTERFACE/$APPENV.env/newrelic.ini /etc/php.d/newrelic.ini
-aws s3 cp s3://$APPGROUP.$APPUSER/vHost.Config.Files/$APPINTERFACE/$APPENV.env/newrelic.ini /etc/php.d/newrelic.ini
+echo "Apply Configurations for NewRelic Services"
+echo "Copying Configuration Files From S3 To Instance"
+    aws s3 cp s3://$appEnv-$appEco-$appName/vhost-newrelic_conf /etc/php.d/newrelic.ini
+    chmod 755 /etc/php.d/newrelic.ini
+    
+echo "Enable & Start NewRelic Services" 
+    systemctl enable newrelic-sysmond.service
+    systemctl enable newrelic-daemon.service
+    systemctl start newrelic-sysmond.service
+    systemctl start newrelic-daemon.service
+    systemctl status newrelic-sysmond.service -l
+    systemctl status newrelic-daemon.service -l
 
-chmod 755 /etc/php.d/newrelic.ini
-systemctl enable newrelic-sysmond.service
-systemctl enable newrelic-daemon.service
-service newrelic-sysmond start
-service newrelic-daemon start
-service newrelic-sysmond status -l
-service newrelic-daemon status -l
+echo "Enable & Start FCGi Daemon"
+    chkconfig spawn-fcgi on
+    systemctl start spawn-fcgi
 
-echo "Enable & Start FCGi Daemon.."
-chkconfig spawn-fcgi on
-systemctl start spawn-fcgi
 
-echo "Enable & Start PHP-FPM Service.."
-#yes|cp -rf /mnt/S3.Buckets/$APPGROUP.$APPUSER/vHost.Config.Files/$APPINTERFACE/$APPENV.env/phpfpm.conf /var/www/$APPUSER.$APPGROUP.vhost.confs/phpfpm.conf
-aws s3 cp s3://$APPGROUP.$APPUSER/vHost.Config.Files/$APPINTERFACE/$APPENV.env/phpfpm.conf /var/www/$APPGROUP.$APPUSER.vhost.confs/phpfpm.conf
+echo "Apply Configurations for PHP-FPM Service"
+echo "Copying Configuration Files From S3 To Instance"
+    aws s3 cp s3://$appEnv-$appEco-$appName/vhost-phpfpm_conf /var/www/$appEco.$appName.vhost.confs/phpfpm.conf
+    chmod 755 /var/www/$APPGROUP.$APPUSER.vhost.confs/phpfpm.conf
+    
+echo "Enable & Start PHP-FPM Service (php-fpm.service)"
+    systemctl enable php-fpm.service
+    systemctl start php-fpm.service
+    systemctl status php-fpm.service -l
 
-chmod 755 /var/www/$APPGROUP.$APPUSER.vhost.confs/phpfpm.conf
-systemctl enable php-fpm.service
-service php-fpm start
-service php-fpm status -l
+echo "Apply Configurations for NGinx Web Server"
+echo "Copying Configuration Files From S3 To Instance"
+    aws s3 cp s3://$appEnv-$appEco-$appName/vhost-nginx_conf /var/www/$appEco.$appName.vhost.confs/nginx.conf
+    chmod 755 /var/www/$APPGROUP.$APPUSER.vhost.confs/nginx.conf
+    
+echo "Enable & Start NGinx Web Server (nginx.service)"
+    systemctl enable nginx.service
+    systemctl start nginx.service
+    systemctl status nginx.service -l
 
-echo "Enable & Start NGinx Web Server (nginx.service).."
-#yes|cp -rf /mnt/S3.Buckets/$APPGROUP.$APPUSER/vHost.Config.Files/$APPINTERFACE/$APPENV.env/nginx.conf /var/www/$APPUSER.$APPGROUP.vhost.confs/nginx.conf
-aws s3 cp s3://$APPGROUP.$APPUSER/vHost.Config.Files/$APPINTERFACE/$APPENV.env/nginx.conf /var/www/$APPGROUP.$APPUSER.vhost.confs/nginx.conf
+echo "Apply Configurations for AWS Cloudwatch Logs Monitoring Service"
+echo "Copying Configuration Files From S3 To Instance"
+    aws s3 cp s3://$appEnv-$appEco-$appName/cloudwatch-allInstances_app_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_app.logs.conf
+    aws s3 cp s3://$appEnv-$appEco-$appName/cloudwatch-allInstances_vhost_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_vhost.logs.conf
+    aws s3 cp s3://$appEnv-$appEco-$appName/cloudwatch-allInstances_services_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_services.logs.conf
+    aws s3 cp s3://$appEnv-$appEco-$appName/cloudwatch-allInstances_gqm_qc_daemons_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_gqm_qc_daemons.logs.conf
+    chmod -R 755 /var/awslogs/etc/config/
+echo "Restaring AWS Cloudwatch Logs Monitoring Service (awslogs)"    
+    service awslogs restart
 
-chmod 755 /var/www/$APPGROUP.$APPUSER.vhost.confs/nginx.conf
-systemctl enable nginx.service
-service nginx start
-service nginx status -l
-
-echo "Project's AWS Logs Configuration Service.."
-#yes|cp -rf /mnt/S3.Buckets/$APPGROUP.$APPUSER/AWS.Services.Config.Files/CloudWatch.Logs/$APPINTERFACE/*.logs.conf /var/awslogs/etc/config/
-aws s3 cp s3://$APPGROUP.$APPUSER/AWS.Services.Config.Files/CloudWatch.Logs/$APPINTERFACE/*.logs.conf /var/awslogs/etc/config/
-
-chmod -R 755 /var/awslogs/etc/config/
-service awslogs restart
 
 service newrelic-sysmond restart
 service newrelic-daemon restart

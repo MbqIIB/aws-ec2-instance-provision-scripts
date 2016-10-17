@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #GET Project's Name and EcoSystem
-PRJGROUP=$(cat /aws.services/.ec2Instance| grep EcoSystem | awk '{print $2}')
-PRJUSER=$(cat /aws.services/.ec2Instance| grep WebApplication | awk '{print $2}')
-APPENV=$(cat /aws.services/.ec2Instance| grep Environment | awk '{print $2}')
-APPINTERFACE=$(cat /aws.services/.ec2Instance| grep Interface | awk '{print $2}')
+appEco=$(cat /aws.services/.ec2Instance     | grep EcoSystem        | awk '{print $2}')
+appName=$(cat /aws.services/.ec2Instance    | grep WebApplication   | awk '{print $2}')
+appEnv=$(cat /aws.services/.ec2Instance     | grep Environment      | awk '{print $2}')
+appIFace=$(cat /aws.services/.ec2Instance   | grep Interface        | awk '{print $2}')
 
 #ERROR Handing Function
 die() {
@@ -13,17 +13,13 @@ die() {
     exit 1
 }
 
-echo $PRJGROUP
-echo $PRJUSER
 
-cd /home/$PRJUSER/
+cd /home/$appName/
 export SYMFONY_ENV=prod
 
-cd /var/www/$PRJGROUP.$PRJUSER/Initial.Deployment/
+cd /var/www/$appEco.$appName/Initial.Deployment/
 
-#yes|cp /mnt/S3.Buckets/$PRJGROUP.$PRJUSER/WebApp.Config.Files/$APPENV.env/parameters.yml /var/www/$PRJGROUP.$PRJUSER/Initial.Deployment/app/config/parameters.yml
-aws s3 cp s3://$PRJGROUP.$PRJUSER/WebApp.Config.Files/$APPENV.env/parameters.yml /var/www/$PRJGROUP.$PRJUSER/Initial.Deployment/app/config/parameters.yml
-
-chmod 600 /var/www/$PRJGROUP.$PRJUSER/Initial.Deployment/app/config/parameters.yml
+aws s3 cp s3://$appEnv-$appEco-$appName/app-symfony-parameters_yml /var/www/$appEco.$appName/Initial.Deployment/app/config/parameters.yml
+chmod 600 /var/www/$appEco.$appName/Initial.Deployment/app/config/parameters.yml
 
 composer -v install --no-dev --optimize-autoloader

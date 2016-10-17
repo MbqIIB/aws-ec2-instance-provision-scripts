@@ -75,7 +75,7 @@ runuser -p -u $sshUser bash $DIR/application.start.cmds/312-git.clone.app.latest
 runuser -p -u $sshUser bash $DIR/application.start.cmds/313-execute.composer.install.sh || die "Executing Composer Install Failed.."
 runuser -p -u $sshUser bash $DIR/application.start.cmds/314-create.all.appuser.symlinks.sh || die "Configure all symlinks to Application User Home Folder Failed.."
 bash $DIR/application.start.cmds/395-sync-enable-start.all.sys.services.sh || die "Syncing, Enabling and Starting All System Services Failed.."
-runuser -p -u $sshUser bash $DIR/application.start.cmds/397-start.all.app.services.sh || die "Starting all Application Services Failed.."
-runuser -p -u $sshUser bash $DIR/application.start.cmds/399-start.gqm-qc-daemons.sh || die "Starting GQM:QueueClient Services Failed.."
+#runuser -p -u $sshUser bash $DIR/application.start.cmds/397-start.all.app.services.sh || die "Starting all Application Services Failed.."
+#runuser -p -u $sshUser bash $DIR/application.start.cmds/399-start.gqm-qc-daemons.sh || die "Starting GQM:QueueClient Services Failed.."
 
 echo "## END CodeDeploy LifeCycle: \"Application Start\"" >> /aws.services/codedeploy/latestDeployment.logs

@@ -43,7 +43,5 @@ if [ "$APPENV" = "stg" ];
 fi
 
 
-
-cd ~
 #git clone -b $appGitRepoBranch git@github.com:bridgemanart/$APPGROUP.$APPUSER.git /var/www/$APPGROUP.$APPUSER/Initial.Deployment/
 git clone -b $appGitRepoBranch $appGitRepoURL /var/www/$APPGROUP.$APPUSER/Initial.Deployment/

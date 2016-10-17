@@ -14,7 +14,7 @@ die() {
 }
 
 
-cd /home/$PRJUSER/
+cd /home/$appName/
 
 echo "Apply Configurations for NewRelic Services"
 echo "Copying Configuration Files From S3 To Instance"
@@ -37,7 +37,7 @@ echo "Enable & Start FCGi Daemon"
 echo "Apply Configurations for PHP-FPM Service"
 echo "Copying Configuration Files From S3 To Instance"
     aws s3 cp s3://$appEnv-$appEco-$appName/vhost-phpfpm_conf /var/www/$appEco.$appName.vhost.confs/phpfpm.conf
-    chmod 755 /var/www/$APPGROUP.$APPUSER.vhost.confs/phpfpm.conf
+    chmod 755 /var/www/$appEco.$appName.vhost.confs/phpfpm.conf
     
 echo "Enable & Start PHP-FPM Service (php-fpm.service)"
     systemctl enable php-fpm.service
@@ -47,7 +47,7 @@ echo "Enable & Start PHP-FPM Service (php-fpm.service)"
 echo "Apply Configurations for NGinx Web Server"
 echo "Copying Configuration Files From S3 To Instance"
     aws s3 cp s3://$appEnv-$appEco-$appName/vhost-nginx_conf /var/www/$appEco.$appName.vhost.confs/nginx.conf
-    chmod 755 /var/www/$APPGROUP.$APPUSER.vhost.confs/nginx.conf
+    chmod 755 /var/www/$appEco.$appName.vhost.confs/nginx.conf
     
 echo "Enable & Start NGinx Web Server (nginx.service)"
     systemctl enable nginx.service

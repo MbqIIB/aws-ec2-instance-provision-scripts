@@ -16,6 +16,7 @@ die() {
 echo $PRJGROUP
 echo $PRJUSER
 
+cd /home/$PRJUSER/
 export SYMFONY_ENV=prod
 
 cd /var/www/$PRJGROUP.$PRJUSER/Initial.Deployment/

@@ -16,7 +16,7 @@ echo $APPGROUP
 echo $APPUSER
 echo $APPINTERFACE
 
-cd ~/live/
+cd /home/$PRJUSER/live/
 mkdir -p var/logs
 
 echo "Check IF GQM-QC:CMD:Transmitter Bundle in enabled in the WebApplication.."

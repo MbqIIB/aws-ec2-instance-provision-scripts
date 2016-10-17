@@ -14,6 +14,8 @@ die() {
 echo $PRJGROUP
 echo $PRJUSER
 
+cd /home/$PRJUSER/
+
 ln -s /var/www /home/$PRJUSER/www
 
 ln -s /var/www/$PRJGROUP.$PRJUSER/Initial.Deployment/ /var/www/$PRJGROUP.$PRJUSER/live

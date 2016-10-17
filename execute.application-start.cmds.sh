@@ -70,11 +70,11 @@ bash $DIR/application.start.cmds/307-sync.php.configuration.sh || die "Configure
 bash $DIR/application.start.cmds/308-sync.nginx.configuration.sh || die "Configure of NGinx Service Failed.."
 bash $DIR/application.start.cmds/310-install.php.composer.sh || die "Installation of PHP Composer Failed.."
 #runuser -l $sshUser -c 'sh $DIR/application.start.cmds/311-sync.appuser.sshd.configuration.sh || die "Configre of Applicatiob SSH User Failed.."'
-runuser -p -l $sshUser -c 'sh $DIR/application.start.cmds/312-git.clone.app.latest.version.sh || die "Cloning of the Application latest GIT revision Failed.."'
-runuser -p -l $sshUser -c 'sh $DIR/application.start.cmds/313-execute.composer.install.sh || die "Executing Composer Install Failed.."'
-runuser -p -l $sshUser -c 'sh $DIR/application.start.cmds/314-create.all.appuser.symlinks.sh || die "Configure all symlinks to Application User Home Folder Failed.."'
+runuser -p -u $sshUser -c 'bash $DIR/application.start.cmds/312-git.clone.app.latest.version.sh || die "Cloning of the Application latest GIT revision Failed.."'
+runuser -p -u $sshUser -c 'bash $DIR/application.start.cmds/313-execute.composer.install.sh || die "Executing Composer Install Failed.."'
+runuser -p -u $sshUser -c 'bash $DIR/application.start.cmds/314-create.all.appuser.symlinks.sh || die "Configure all symlinks to Application User Home Folder Failed.."'
 bash $DIR/application.start.cmds/395-sync-enable-start.all.sys.services.sh || die "Syncing, Enabling and Starting All System Services Failed.."
-runuser -p -l $sshUser -c 'sh $DIR/application.start.cmds/397-start.all.app.services.sh || die "Starting all Application Services Failed.."'
-runuser -p -l $sshUser -c 'sh $DIR/application.start.cmds/399-start.gqm-qc-daemons.sh || die "Starting GQM:QueueClient Services Failed.."'
+runuser -p -u $sshUser -c 'bash $DIR/application.start.cmds/397-start.all.app.services.sh || die "Starting all Application Services Failed.."'
+runuser -p -u $sshUser -c 'bash $DIR/application.start.cmds/399-start.gqm-qc-daemons.sh || die "Starting GQM:QueueClient Services Failed.."'
 
 echo "## END CodeDeploy LifeCycle: \"Application Start\"" >> /aws.services/codedeploy/latestDeployment.logs

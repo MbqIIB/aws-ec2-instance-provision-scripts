@@ -37,6 +37,7 @@ ec2TagServiceStatus=$(aws ec2 describe-tags --filters "Name=resource-id,Values=$
     echo "##################################################"
     echo "##################################################"
     cat /aws.services/.ec2Instance
+    chmod 777 /aws.services/.ec2Instance
     echo "##################################################"
     echo "##################################################"
 

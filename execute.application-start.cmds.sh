@@ -70,7 +70,7 @@ bash $DIR/application.start.cmds/306-prepare.app.lnxfolders.structure.sh || die 
 bash $DIR/application.start.cmds/307-sync.php.configuration.sh || die "Configure of PHP Service Failed.."
 bash $DIR/application.start.cmds/308-sync.nginx.configuration.sh || die "Configure of NGinx Service Failed.."
 bash $DIR/application.start.cmds/310-install.php.composer.sh || die "Installation of PHP Composer Failed.."
-#runuser -l $sshUser -c 'sh $DIR/application.start.cmds/311-sync.appuser.sshd.configuration.sh || die "Configre of Applicatiob SSH User Failed.."'
+runuser -p -u $sshUser bash $DIR/application.start.cmds/311-sync.appuser.sshd.configuration.sh || die "Configre of Applicatiob SSH User Failed.."
 runuser -p -u $sshUser bash $DIR/application.start.cmds/312-git.clone.app.latest.version.sh || die "Cloning of the Application latest GIT revision Failed.."
 runuser -p -u $sshUser bash $DIR/application.start.cmds/313-execute.composer.install.sh || die "Executing Composer Install Failed.."
 runuser -p -u $sshUser bash $DIR/application.start.cmds/314-create.all.appuser.symlinks.sh || die "Configure all symlinks to Application User Home Folder Failed.."

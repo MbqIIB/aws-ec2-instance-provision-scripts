@@ -11,5 +11,5 @@ echo "####################"
   echo $appName
 echo "####################"
 
-aws s3 cp s3://$appEnv-$appEco-$appName/.app-iam_user.credentials /aws.services/.aws/.$appEco.$appName.credentials
+aws s3 cp s3://$appEnv-$appEco-$appName-app-cnf/.app-iam_user.credentials /aws.services/.aws/.$appEco.$appName.credentials
 chmod 600 /aws.services/.aws/.$appEco.$appName.credentials

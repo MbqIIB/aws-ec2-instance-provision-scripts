@@ -13,8 +13,8 @@ appName=$(cat /aws.services/.ec2Instance    | grep WebApplication   | awk '{prin
 appEnv=$(cat /aws.services/.ec2Instance     | grep Environment      | awk '{print $2}')
 
 # Retrieve GitHub Repo Configuration Files from S3 Bucket
-    aws s3 cp s3://$appEnv-$appEco-$appName/github-repository_info /tmp/.app-github-repository_info
-    aws s3 cp s3://$appEnv-$appEco-$appName/github-repository_sshprvkey /tmp/.app-github-repository_sshprvkey
+    aws s3 cp s3://$appEnv-$appEco-$appName-app-cnf/github-repository_info /tmp/.app-github-repository_info
+    aws s3 cp s3://$appEnv-$appEco-$appName-app-cnf/github-repository_sshprvkey /tmp/.app-github-repository_sshprvkey
     chmod 600 /tmp/.app-github*
 
 # Parse GitHub Repo Information

@@ -19,7 +19,7 @@ export SYMFONY_ENV=prod
 
 cd /var/www/$appEco.$appName/Initial.Deployment/
 
-aws s3 cp s3://$appEnv-$appEco-$appName/app-symfony_parameters_yml /var/www/$appEco.$appName/Initial.Deployment/app/config/parameters.yml
+aws s3 cp s3://$appEnv-$appEco-$appName-app-cnf/app-symfony_parameters_yml /var/www/$appEco.$appName/Initial.Deployment/app/config/parameters.yml
 chmod 600 /var/www/$appEco.$appName/Initial.Deployment/app/config/parameters.yml
 
 composer -v install --no-dev --optimize-autoloader

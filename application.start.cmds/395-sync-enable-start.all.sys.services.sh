@@ -18,7 +18,7 @@ cd /home/$appName/
 
 echo "Apply Configurations for NewRelic Services"
 echo "Copying Configuration Files From S3 To Instance"
-    aws s3 cp s3://$appEnv-$appEco-$appName/vhost-newrelic_conf /etc/php.d/newrelic.ini
+    aws s3 cp s3://$appEnv-$appEco-$appName-app-cnf/vhost-newrelic_conf /etc/php.d/newrelic.ini
     chmod 755 /etc/php.d/newrelic.ini
     
 echo "Enable & Start NewRelic Services" 
@@ -36,7 +36,7 @@ echo "Enable & Start FCGi Daemon"
 
 echo "Apply Configurations for PHP-FPM Service"
 echo "Copying Configuration Files From S3 To Instance"
-    aws s3 cp s3://$appEnv-$appEco-$appName/vhost-phpfpm_conf /var/www/$appEco.$appName.vhost.confs/phpfpm.conf
+    aws s3 cp s3://$appEnv-$appEco-$appName-app-cnf/vhost-phpfpm_conf /var/www/$appEco.$appName.vhost.confs/phpfpm.conf
     chmod 755 /var/www/$appEco.$appName.vhost.confs/phpfpm.conf
     
 echo "Enable & Start PHP-FPM Service (php-fpm.service)"
@@ -46,7 +46,7 @@ echo "Enable & Start PHP-FPM Service (php-fpm.service)"
 
 echo "Apply Configurations for NGinx Web Server"
 echo "Copying Configuration Files From S3 To Instance"
-    aws s3 cp s3://$appEnv-$appEco-$appName/vhost-nginx_conf /var/www/$appEco.$appName.vhost.confs/nginx.conf
+    aws s3 cp s3://$appEnv-$appEco-$appName-app-cnf/vhost-nginx_conf /var/www/$appEco.$appName.vhost.confs/nginx.conf
     chmod 755 /var/www/$appEco.$appName.vhost.confs/nginx.conf
     
 echo "Enable & Start NGinx Web Server (nginx.service)"
@@ -56,10 +56,10 @@ echo "Enable & Start NGinx Web Server (nginx.service)"
 
 echo "Apply Configurations for AWS Cloudwatch Logs Monitoring Service"
 echo "Copying Configuration Files From S3 To Instance"
-    aws s3 cp s3://$appEnv-$appEco-$appName/cloudwatch-allInstances_app_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_app.logs.conf
-    aws s3 cp s3://$appEnv-$appEco-$appName/cloudwatch-allInstances_vhost_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_vhost.logs.conf
-    aws s3 cp s3://$appEnv-$appEco-$appName/cloudwatch-allInstances_services_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_services.logs.conf
-    aws s3 cp s3://$appEnv-$appEco-$appName/cloudwatch-allInstances_gqm_qc_daemons_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_gqm_qc_daemons.logs.conf
+    aws s3 cp s3://$appEnv-$appEco-$appName-app-cnf/cloudwatch-allInstances_app_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_app.logs.conf
+    aws s3 cp s3://$appEnv-$appEco-$appName-app-cnf/cloudwatch-allInstances_vhost_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_vhost.logs.conf
+    aws s3 cp s3://$appEnv-$appEco-$appName-app-cnf/cloudwatch-allInstances_services_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_services.logs.conf
+    aws s3 cp s3://$appEnv-$appEco-$appName-app-cnf/cloudwatch-allInstances_gqm_qc_daemons_logs_conf /var/awslogs/etc/config/cloudwatch-allInstances_gqm_qc_daemons.logs.conf
     chmod -R 755 /var/awslogs/etc/config/
 echo "Restaring AWS Cloudwatch Logs Monitoring Service (awslogs)"    
     service awslogs restart

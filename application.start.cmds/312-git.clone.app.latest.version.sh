@@ -9,10 +9,10 @@ appEnv=$(cat /aws.services/.ec2Instance     | grep Environment      | awk '{prin
 aws s3 cp s3://$appEnv-$appEco-$appName/github-repository_info /tmp/.app-github-repository_info
 aws s3 cp s3://$appEnv-$appEco-$appName/github-repository_sshprvkey /tmp/.app-github-repository_sshprvkey
 chmod 600 /tmp/.app-github*
-    appGitRepoUsername=$(cat /tmp/.app-github.repo | grep Username      | awk '{print $2}')
-    appGitRepoPassword=$(cat /tmp/.app-github.repo | grep Password      | awk '{print $2}')
-    appGitRepoURL=$(cat /tmp/.app-github.repo      | grep RepoURL       | awk '{print $2}')
-    appGitRepoBranch=$(cat /tmp/.app-github.repo   | grep RepoBranch    | awk '{print $2}')    
+    appGitRepoUsername=$(cat /tmp/.app-github-repository_info | grep Username      | awk '{print $2}')
+    appGitRepoPassword=$(cat /tmp/.app-github-repository_info | grep Password      | awk '{print $2}')
+    appGitRepoURL=$(cat /tmp/.app-github-repository_info      | grep RepoURL       | awk '{print $2}')
+    appGitRepoBranch=$(cat /tmp/.app-github-repository_info   | grep RepoBranch    | awk '{print $2}')    
     appGitRepoSSHPrivateKey=$(cat /tmp/.app-github-repository_sshprvkey)
 
 # Remove GitRepo Information File from Temp Folder
